@@ -10,7 +10,7 @@
 
 This week, the main thing students needed to understand was that BugHound is an agentic system, not just one AI response. It follows a workflow where it analyzes code, proposes a fix, checks the risk, and then decides whether the fix is safe enough to trust. I think students may struggle most with understanding fallback behavior, strict output formatting, and why a fix that looks reasonable can still be risky. AI was helpful for explaining the codebase, thinking through small reliability improvements, and helping plan test ideas. At the same time, AI was sometimes misleading because it often returned unusable output, and some suggestions sounded good at first but still needed to be checked carefully against the actual system behavior. One way I would guide a student without giving the answer is by asking them which exact step of the agent workflow they are changing and what behavior they expect to change after that edit.
 
---
+---
 
 BugHound is a small, agent-style debugging tool. It analyzes a Python code snippet, proposes a fix, and runs basic reliability checks before deciding whether the fix is safe to apply automatically.
 

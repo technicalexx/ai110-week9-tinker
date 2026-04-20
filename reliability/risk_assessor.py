@@ -59,7 +59,8 @@ def assess_risk(
 
     if "except:" in original_code and "except:" not in fixed_code:
         # This is usually good, but still risky.
-        score -= 5
+        # score -= 5
+        score -= 10
         reasons.append("Bare except was modified, verify correctness.")
 
     # ----------------------------

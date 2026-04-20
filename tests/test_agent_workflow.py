@@ -47,3 +47,20 @@ def test_mock_client_forces_llm_fallback_to_heuristics_for_analysis():
     assert any(issue.get("type") == "Code Quality" for issue in result["issues"])
     # Ensure we logged the fallback path
     assert any("Falling back to heuristics" in entry.get("message", "") for entry in result["logs"])
+
+
+def test_malformed_analyzer_output_falls_back_to_heuristics():
+    class MockClient:
+        def complete(self, system_prompt: str, user_prompt: str) -> str:
+            if "Analyze" in user_prompt or "Analyze this Python code" in user_prompt:
+                return '[{"type": "Code Quality", "severity": "Low"}]'
+            return ""
+
+    agent = BugHoundAgent(client=MockClient())
+    result = agent.run('print("hello")')
+
+    assert any(issue["type"] == "Code Quality" for issue in result["issues"])
+    assert any(
+        log["step"] == "ANALYZE" and "invalid or malformed" in log["message"]
+        for log in result["logs"]
+    )

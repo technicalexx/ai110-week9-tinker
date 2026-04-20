@@ -1,5 +1,17 @@
 # 🐶 BugHound
 
+---
+
+## _The Implementation and Reflection is in TF_Implementation.md_
+
+---
+
+## _SUMMARY:_
+
+This week, the main thing students needed to understand was that BugHound is an agentic system, not just one AI response. It follows a workflow where it analyzes code, proposes a fix, checks the risk, and then decides whether the fix is safe enough to trust. I think students may struggle most with understanding fallback behavior, strict output formatting, and why a fix that looks reasonable can still be risky. AI was helpful for explaining the codebase, thinking through small reliability improvements, and helping plan test ideas. At the same time, AI was sometimes misleading because it often returned unusable output, and some suggestions sounded good at first but still needed to be checked carefully against the actual system behavior. One way I would guide a student without giving the answer is by asking them which exact step of the agent workflow they are changing and what behavior they expect to change after that edit.
+
+--
+
 BugHound is a small, agent-style debugging tool. It analyzes a Python code snippet, proposes a fix, and runs basic reliability checks before deciding whether the fix is safe to apply automatically.
 
 ---
@@ -8,22 +20,22 @@ BugHound is a small, agent-style debugging tool. It analyzes a Python code snipp
 
 Given a short Python snippet, BugHound:
 
-1. **Analyzes** the code for potential issues  
-   - Uses heuristics in offline mode  
-   - Uses Gemini when API access is enabled  
+1. **Analyzes** the code for potential issues
+   - Uses heuristics in offline mode
+   - Uses Gemini when API access is enabled
 
-2. **Proposes a fix**  
-   - Either heuristic-based or LLM-generated  
-   - Attempts minimal, behavior-preserving changes  
+2. **Proposes a fix**
+   - Either heuristic-based or LLM-generated
+   - Attempts minimal, behavior-preserving changes
 
-3. **Assesses risk**  
-   - Scores the fix  
-   - Flags high-risk changes  
-   - Decides whether the fix should be auto-applied or reviewed by a human  
+3. **Assesses risk**
+   - Scores the fix
+   - Flags high-risk changes
+   - Decides whether the fix should be auto-applied or reviewed by a human
 
-4. **Shows its work**  
-   - Displays detected issues  
-   - Shows a diff between original and fixed code  
+4. **Shows its work**
+   - Displays detected issues
+   - Shows a diff between original and fixed code
    - Logs each agent step
 
 ---
@@ -57,7 +69,7 @@ streamlit run bughound_app.py
 
 In the sidebar, select:
 
-* **Model mode:** Heuristic only (no API)
+- **Model mode:** Heuristic only (no API)
 
 This mode uses simple pattern-based rules and is useful for testing the workflow without network access.
 
@@ -87,8 +99,8 @@ streamlit run bughound_app.py
 
 In the sidebar, select:
 
-* **Model mode:** Gemini (requires API key)
-* Choose a Gemini model and temperature
+- **Model mode:** Gemini (requires API key)
+- Choose a Gemini model and temperature
 
 BugHound will now use Gemini for analysis and fix generation, while still applying local reliability checks.
 
@@ -104,6 +116,6 @@ pytest
 
 You should see tests covering:
 
-* Risk scoring and guardrails
-* Heuristic fallbacks when LLM output is invalid
-* End-to-end agent workflow shape
+- Risk scoring and guardrails
+- Heuristic fallbacks when LLM output is invalid
+- End-to-end agent workflow shape

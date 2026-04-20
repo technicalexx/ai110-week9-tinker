@@ -79,7 +79,13 @@ class BugHoundAgent:
         issues = self._parse_json_array_of_issues(raw)
 
         if issues is None:
-            self._log("ANALYZE", "LLM output was not parseable JSON. Falling back to heuristics.")
+
+
+            # self._log("ANALYZE", "LLM output was not parseable JSON. Falling back to heuristics.")
+            self._log("ANALYZE", "LLM output was invalid or malformed. Falling back to heuristics.")
+
+
+            
             return self._heuristic_analyze(code_snippet)
 
         return issues
@@ -185,19 +191,50 @@ class BugHoundAgent:
 
         return None
 
-    def _normalize_issues(self, arr: List[Any]) -> List[Dict[str, str]]:
+    # def _normalize_issues(self, arr: List[Any]) -> List[Dict[str, str]]:
+    #     issues: List[Dict[str, str]] = []
+    #     for item in arr:
+    #         if not isinstance(item, dict):
+    #             continue
+    #         issues.append(
+    #             {
+    #                 "type": str(item.get("type", "Issue")),
+    #                 "severity": str(item.get("severity", "Unknown")),
+    #                 "msg": str(item.get("msg", "")).strip(),
+    #             }
+    #         )
+    #     return issues
+
+
+    def _normalize_issues(self, arr: List[Any]) -> Optional[List[Dict[str, str]]]:
         issues: List[Dict[str, str]] = []
+
         for item in arr:
             if not isinstance(item, dict):
-                continue
+                return None
+
+            if "type" not in item or "severity" not in item or "msg" not in item:
+                return None
+
+            issue_type = str(item.get("type", "")).strip()
+            severity = str(item.get("severity", "")).strip()
+            msg = str(item.get("msg", "")).strip()
+
+            if not issue_type or not severity or not msg:
+                return None
+
             issues.append(
                 {
-                    "type": str(item.get("type", "Issue")),
-                    "severity": str(item.get("severity", "Unknown")),
-                    "msg": str(item.get("msg", "")).strip(),
+                    "type": issue_type,
+                    "severity": severity,
+                    "msg": msg,
                 }
             )
+
         return issues
+
+
+
 
     def _try_json_loads(self, s: str) -> Any:
         try:
